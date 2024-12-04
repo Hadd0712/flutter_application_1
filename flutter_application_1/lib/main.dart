@@ -9,7 +9,7 @@ void main() {
 
   final List<MataKuliah> mataKuliahList = [
     MataKuliah(kode: "MK001", nama: "Pemrograman", sks: 3),
-    MataKuliah(kode: "MK002", nama: "Kalkulus", sks: 4),  
+    MataKuliah(kode: "MK002", nama: "Kalkulus", sks: 4),
     MataKuliah(kode: "MK003", nama: "Basis Data", sks: 3),
   ];
 
@@ -44,7 +44,11 @@ void main() {
           print("Belum ada nilai yang dimasukkan.");
         } else {
           final ipk = IPKCalculator.hitungIPK(nilaiMahasiswa);
-          print("IPK Anda: ${ipk.toStringAsFixed(2)}");
+          if (ipk != null) {
+            print("IPK Anda: ${ipk.toStringAsFixed(2)}");
+          } else {
+            print("Gagal menghitung IPK.");
+          }
         }
         break;
 
@@ -74,5 +78,19 @@ void main() {
 }
 
 class IPKCalculator {
-  static hitungIPK(List<Nilai> nilaiMahasiswa) {}
+  static double? hitungIPK(List<Nilai> nilaiMahasiswa) {
+    if (nilaiMahasiswa.isEmpty) {
+      return null;
+    }
+
+    double totalNilai = 0.0;
+    int totalSKS = 0;
+
+    for (var nilai in nilaiMahasiswa) {
+      totalNilai += nilai.nilai * nilai.mataKuliah.sks;
+      totalSKS += nilai.mataKuliah.sks;
+    }
+
+    return totalSKS > 0 ? totalNilai / totalSKS : null;
+  }
 }
